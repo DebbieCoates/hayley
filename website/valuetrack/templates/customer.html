@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+customer.html
+
+    <br/><br/>    
+    <h1>Customer Details</h1>
+
+    {% if customer.logo %}
+    <img src="{{ customer.logo.url }}"  style="max-width:200px; max-height:200px;"/>
+    {% endif %}
+    <br/><br/>  
+    <br/>
+
+    <strong>Name:</strong> {{ customer.name }}<br/>
+    <strong>Contact:</strong> {{ customer.main_contact }}<br/>
+    <strong>Phone:</strong> {{ customer.phone }}<br/>
+    <strong>Email:</strong> {{ customer.email }}<br/>
+    <strong>Account Manager:</strong> {{ customer.account_manager }}<br/>
+    <strong>Status:</strong>{{ customer.status }}<br/>
+    <strong>Industry:</strong> {{ customer.industry }}<br/>
+    <strong>Location:</strong> {{ customer.location }}<br/>
+    <strong>Notes:</strong> {{ customer.notes }}<br/>
+
+    <br/><br/>
+    <a href="{% url 'customer_edit' customer.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'customer_delete' customer.id %}" class="btn btn-danger">Delete</a>
+    
+    <br/><br/>
+    <a href="{% url 'customers' %}" class="btn btn-outline-primary">Back</a>
+
+{% endblock %}
+

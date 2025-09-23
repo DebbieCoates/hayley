@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+customer_add.html
+
+    <br/><br/>    
+    <h1>Add Customer</h1>
+    <br/>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'customer_add' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+         <br/><br/>
+        <button type="submit" class="btn btn-primary">Save Changes</button>  
+    </form>
+
+    <br/><br/>
+    <a href="{% url 'customers' %}" class="btn btn-outline-primary">Back</a>
+
+{% endblock %}
+

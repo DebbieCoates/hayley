@@ -1,0 +1,61 @@
+from django.db import models
+
+Industry_CHOICES = [
+        ('Tech', 'Technology'), 
+        ('Finance', 'Finance'), 
+        ('Health', 'Healthcare'), 
+        ('Edu', 'Education'), 
+        ('Retail', 'Retail'),
+        ('Eng', 'Engineering'),
+        ('Auto', 'Automotive'),
+        ('Food', 'Food & Beverage'),
+        ('Media', 'Media & Entertainment'),
+        ('Con', 'Construction'),
+        ('Other', 'Other')
+    ]
+
+location_CHOICES = [
+        ('East of England', 'East of England'), 
+        ('East Midlands', 'East Midlands'), 
+        ('London', 'London'), 
+        ('North East', 'North East'), 
+        ('North West', 'North West'),
+        ('South East', 'South East'),
+        ('South West', 'South West'),  
+        ('West Midlands', 'West Midlands'),
+        ('Yorkshire and the Humber', 'Yorkshire and the Humber'),
+        ('Scotland', 'Scotland'),
+        ('Wales', 'Wales'),
+        ('Northern Ireland', 'Northern Ireland'),
+        ('Other', 'Other')
+    ]
+
+status_CHOICES = [
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Pending', 'Pending'),
+        ('Archived', 'Archived'),
+        ('Prospect', 'Prospect'),
+        ('Other', 'Other')
+    ]
+
+# Create your models here.
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+    main_contact = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    industry = models.CharField(max_length=100, choices=Industry_CHOICES, blank=True, null=True)
+    location = models.CharField(max_length=100, choices=location_CHOICES, blank=True, null=True)
+    account_manager = models.CharField(max_length=100, blank=True, null=True)   
+    status = models.CharField(max_length=50, choices=status_CHOICES, blank=True, null=True, default='Active')
+    notes = models.TextField(blank=True, null=True) 
+    logo = models.ImageField(upload_to='customer_logos/', blank=True, null=True)
+     
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    archived = models.BooleanField(default=False)
+   
+
+    def __str__(self):
+        return self.name
