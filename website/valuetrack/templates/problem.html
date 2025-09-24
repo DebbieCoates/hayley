@@ -9,9 +9,9 @@ problem.html
     <br/>
 
     <p>Customer: <a href="{% url 'customer' customer.id %}">{{ customer.name }}</a></p>
-        <p><strong>Contact:</strong> {{ customer.main_contact }}</p>
+        {% comment %} <p><strong>Contact:</strong> {{ customer.main_contact }}</p>
         <p><strong>Email:</strong> {{ customer.email }}</p>
-        <p><strong>Phone:</strong> {{ customer.phone }}</p>
+        <p><strong>Phone:</strong> {{ customer.phone }}</p> {% endcomment %}
 
     {% comment %} <strong>Name:</strong> {{ customer.name }}<br/> {% endcomment %}
     <strong>Title:</strong> {{ problem.title }}<br/>
@@ -24,7 +24,7 @@ problem.html
 
     <br/><br/>
     <a href="" class="btn btn-primary">Edit</a>
-    <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn btn-sm btn-danger">Delete</a>
+    <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn  btn-danger">Delete</a>
     
     <br/><br/>
     <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary">Back to Customer</a>

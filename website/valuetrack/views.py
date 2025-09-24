@@ -30,8 +30,6 @@ def problem(request, problem_id):
         'customer': customer
     })
 
-
-
 # Delete a problem statement
 def problem_delete(request, problem_id):
     problem = ProblemStatement.objects.get(id=problem_id)
@@ -47,6 +45,7 @@ def problem_delete(request, problem_id):
     # Default fallback
     return redirect('problems')
 
+# Edit a problem statement
 def problem_edit(request, problem_id):
     problem = get_object_or_404(ProblemStatement, id=problem_id)
     customer = problem.customer
@@ -66,7 +65,6 @@ def problem_edit(request, problem_id):
         'customer': customer
     })
 
-
 # Add a new problem statement for a specific customer
 def problem_add_from_customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
@@ -84,7 +82,7 @@ def problem_add_from_customer(request, customer_id):
 
     return render(request, 'problem_add.html', {'form': form, 'customer': customer})
    
-   
+# Add a new problem statement (general)   
 def problem_add(request):
     if request.method == "POST":
         form = UpdateProblem(request.POST)
@@ -97,8 +95,10 @@ def problem_add(request):
 
     return render(request, 'problem_add.html', {'form': form})
 
- 
-# Update User Details    
+
+ # Update User Details    
+
+# Update User Info
 def update_user(request):
 	if request.user.is_authenticated:
 		# Get current user
@@ -198,12 +198,23 @@ def register_user(request):
 		return render(request, 'register.html', {'form':form})
 
 # view all customers
+
 def customer_list(request):
+    sort = request.GET.get('sort', 'name')  # default sort field
+    direction = request.GET.get('direction', 'asc')  # default direction
+
+    order_by = sort if direction == 'asc' else f'-{sort}'
+
     customers = Customer.objects.annotate(
         open_problems=Count('problem_statements', filter=Q(problem_statements__status='Open')),
         closed_problems=Count('problem_statements', filter=Q(problem_statements__status='Closed'))
-    )
-    return render(request, 'customer_list.html', {'customers': customers})
+    ).order_by(order_by)
+
+    return render(request, 'customer_list.html', {
+        'customers': customers,
+        'sort': sort,
+        'direction': direction
+    })
 
 # view an individual customer
 def customer(request, customer_id):
