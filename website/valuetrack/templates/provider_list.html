@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+provider_list.html
+
+
+<br/><br/>
+<h1>Provider List</h1>
+<br/>
+
+<a href="" class="btn btn-success">Add Provider</a>
+<br/><br/>
+
+<div class="container">
+  <div class="row d-flex align-items-end">
+    <!-- Left Column: Filter -->
+    <div class="col-md-6 text-start d-flex flex-column justify-content-end">
+        <form method="get" class="d-flex flex-wrap gap-3 align-items-end" id="filterForm">
+        <div>
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status" class="form-select form-select-sm" onchange="document.getElementById('filterForm').submit();">
+            <option value="">All</option>
+            <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
+            <option value="Inactive" {% if status_filter == 'Inactive' %}selected{% endif %}>Inactive</option>
+            </select>
+        </div>
+
+  <input type="hidden" name="sort" value="{{ sort }}">
+  <input type="hidden" name="direction" value="{{ direction }}">
+</form>
+
+
+    </div>
+
+    <!-- Right Column: Summary -->
+    <div class="col-md-6 text-end d-flex flex-column justify-content-end">
+      <div class="text-end">
+        <h5>Provider Status Summary</h5>
+        <ul class="list-inline">
+          {% for item in provider_status_summary %}
+            <li class="list-inline-item"><strong>{{ item.status }}:</strong> {{ item.count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<table class="table table-striped table-hover table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>
+        <a href="?sort=name&direction={% if sort == 'name' and direction == 'asc' %}desc{% else %}asc{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+          Name {% if sort == 'name' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+        </a>
+      </th>
+      <th>
+        <a href="?sort=type&direction={% if sort == 'type' and direction == 'asc' %}desc{% else %}asc{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+          Type {% if sort == 'type' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+        </a>
+      </th>
+      <th>
+        <a href="?sort=contact_name&direction={% if sort == 'contact_name' and direction == 'asc' %}desc{% else %}asc{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+          Contact Name {% if sort == 'contact_name' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+        </a>
+      </th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>
+        <a href="?sort=status&direction={% if sort == 'status' and direction == 'asc' %}desc{% else %}asc{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+          Status {% if sort == 'status' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+        </a>
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for provider in providers %}
+    <tr>
+      <td><a href="">{{ provider.name }}</a></td>
+      <td>{{ provider.type }}</td>
+      <td>{{ provider.contact_name }}</td>
+      <td>{{ provider.email }}</td>
+      <td>{{ provider.phone }}</td>
+      <td>{{ provider.status }}</td>
+      <td>
+        <a href="" class="btn btn-primary">Edit</a>
+        <a href="" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this provider?');">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+               {% comment %} <a href="{% url 'provider' provider.id %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'provider_edit' provider.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'provider_delete' provider.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this provider?');">Delete</a> {% endcomment %}
+

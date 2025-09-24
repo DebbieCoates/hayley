@@ -15,39 +15,34 @@ problem_list.html
         <div class="row d-flex align-items-end">
             <!-- Left Column: Filters -->
             <div class="col-md-6 text-start d-flex flex-column justify-content-end">
-            <form method="get" class="d-flex flex-wrap gap-3 align-items-end">
-                <!-- Status Filter -->
-                <div>
-                <label for="status">Filter by Status:</label>
-                <select name="status" id="status" class="form-select form-select-sm">
-                    <option value="">All</option>
-                    <option value="Open" {% if status_filter == 'Open' %}selected{% endif %}>Open</option>
-                    <option value="Closed" {% if status_filter == 'Closed' %}selected{% endif %}>Closed</option>
-                    <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
-                </select>
-                </div>
 
-                <!-- Urgency Filter -->
-                <div>
-                <label for="urgency">Filter by Urgency:</label>
-                <select name="urgency" id="urgency" class="form-select form-select-sm">
-                    <option value="">All</option>
-                    <option value="Low" {% if urgency_filter == 'Low' %}selected{% endif %}>Low</option>
-                    <option value="Medium" {% if urgency_filter == 'Medium' %}selected{% endif %}>Medium</option>
-                    <option value="High" {% if urgency_filter == 'High' %}selected{% endif %}>High</option>
-                </select>
-                </div>
+                <form method="get" class="d-flex flex-wrap gap-3 align-items-end" id="problemFilterForm">
+                    <!-- Status Filter -->
+                    <div>
+                        <label for="status">Filter by Status:</label>
+                        <select name="status" id="status" class="form-select form-select-sm" onchange="document.getElementById('problemFilterForm').submit();">
+                        <option value="">All</option>
+                        <option value="Open" {% if status_filter == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="Closed" {% if status_filter == 'Closed' %}selected{% endif %}>Closed</option>
+                        <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        </select>
+                    </div>
 
-                <!-- Buttons -->
-                <div>
-                <button type="submit" class="btn btn-secondary btn-sm">Apply Filters</button>
-                <a href="{% url 'problems' %}" class="btn btn-outline-secondary btn-sm">Reset</a>
-                </div>
+                    <!-- Urgency Filter -->
+                    <div>
+                        <label for="urgency">Filter by Urgency:</label>
+                        <select name="urgency" id="urgency" class="form-select form-select-sm" onchange="document.getElementById('problemFilterForm').submit();">
+                        <option value="">All</option>
+                        <option value="Low" {% if urgency_filter == 'Low' %}selected{% endif %}>Low</option>
+                        <option value="Medium" {% if urgency_filter == 'Medium' %}selected{% endif %}>Medium</option>
+                        <option value="High" {% if urgency_filter == 'High' %}selected{% endif %}>High</option>
+                        </select>
+                    </div>
 
-                <!-- Hidden Sort Inputs -->
-                <input type="hidden" name="sort" value="{{ sort }}">
-                <input type="hidden" name="direction" value="{{ direction }}">
-            </form>
+                    <!-- Hidden Sort Inputs -->
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                    <input type="hidden" name="direction" value="{{ direction }}">
+                </form>
             </div>
 
             <!-- Right Column: Summary -->

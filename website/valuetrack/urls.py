@@ -26,8 +26,13 @@ urlpatterns = [
     path('problem/<int:problem_id>/', views.problem, name='problem'),
     path('problem_delete/<int:problem_id>/', views.problem_delete, name='problem_delete'),
     path('problem_edit/<int:problem_id>/', views.problem_edit, name='problem_edit'),
-    # path('problem_add/<int:customer_id>/', views.problem_add, name='problem_add')
-    
     path('problem_add/', views.problem_add, name='problem_add'),
     path('problem_add/<int:customer_id>/', views.problem_add_from_customer, name='problem_add_from_customer'),
+    
+    # Provider URLs
+    path('providers/', views.provider_list, name='providers'),
+    path('provider/<int:provider_id>/', views.provider, name='provider'),
+    path('provider_delete/<int:provider_id>/', views.provider_delete, name='provider_delete'),
+    path('provider_edit/<int:provider_id>/', views.provider_edit, name='provider_edit'),
+    path('provider_add/', views.provider_add, name='provider_add'),
 ]

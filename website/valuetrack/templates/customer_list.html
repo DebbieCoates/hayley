@@ -16,39 +16,33 @@ customer_list.html
         <div class="row d-flex align-items-end">
             <!-- Left Column -->
             <div class="col-md-6 text-start d-flex flex-column justify-content-end">
-            <form method="get" class="d-flex flex-wrap gap-3 align-items-end">
+                <form method="get" class="d-flex flex-wrap gap-3 align-items-end" id="customerFilterForm">
                 <!-- Customer Status Filter -->
                 <div>
-                <label for="status">Customer Status:</label>
-                <select name="status" id="status" class="form-select form-select-sm">
+                    <label for="status">Customer Status:</label>
+                    <select name="status" id="status" class="form-select form-select-sm" onchange="document.getElementById('customerFilterForm').submit();">
                     <option value="">All</option>
                     <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
                     <option value="Inactive" {% if status_filter == 'Inactive' %}selected{% endif %}>Inactive</option>
                     <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
-                </select>
+                    </select>
                 </div>
 
                 <!-- Problem Status Filter -->
                 <div>
-                <label for="problem_status">Problem Status:</label>
-                <select name="problem_status" id="problem_status" class="form-select form-select-sm">
+                    <label for="problem_status">Problem Status:</label>
+                    <select name="problem_status" id="problem_status" class="form-select form-select-sm" onchange="document.getElementById('customerFilterForm').submit();">
                     <option value="">All</option>
                     <option value="Open" {% if problem_status_filter == 'Open' %}selected{% endif %}>Open</option>
                     <option value="Closed" {% if problem_status_filter == 'Closed' %}selected{% endif %}>Closed</option>
                     <option value="In Progress" {% if problem_status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
-                </select>
-                </div>
-
-                <!-- Buttons -->
-                <div>
-                <button type="submit" class="btn btn-secondary btn-sm">Apply Filter</button>
-                <a href="{% url 'customers' %}" class="btn btn-outline-secondary btn-sm">Reset</a>
+                    </select>
                 </div>
 
                 <!-- Hidden Sort Inputs -->
                 <input type="hidden" name="sort" value="{{ sort }}">
                 <input type="hidden" name="direction" value="{{ direction }}">
-            </form>
+                </form>
             </div>
 
             <!-- Right Column -->

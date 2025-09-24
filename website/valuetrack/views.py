@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, ProblemStatement
+from .models import Customer, ProblemStatement, Provider
 from django.contrib import messages
 from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem
 from django.contrib.auth import authenticate, login, logout
@@ -7,12 +7,48 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 
+def provider_list(request):
+    sort = request.GET.get('sort', 'name')
+    direction = request.GET.get('direction', 'asc')
+    status_filter = request.GET.get('status')
+
+    order_by = sort if direction == 'asc' else f'-{sort}'
+
+    providers = Provider.objects.all()
+
+    if status_filter:
+        providers = providers.filter(status__iexact=status_filter)
+
+    providers = providers.order_by(order_by)
+
+    provider_status_summary = Provider.objects.values('status').annotate(count=Count('id'))
+
+    return render(request, 'provider_list.html', {
+        'providers': providers,
+        'sort': sort,
+        'direction': direction,
+        'status_filter': status_filter,
+        'provider_status_summary': provider_status_summary,
+    })
+    
+def provider(request):
+    pass
+
+def provider_delete(request):
+    pass
+
+def provider_edit(request):
+    pass
+
+def provider_add(request):
+    pass
 
 
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
 
+# About page
 def about(request):
     return render(request, 'about.html')
 
@@ -228,8 +264,6 @@ def register_user(request):
 		return render(request, 'register.html', {'form':form})
 
 # view all customers
-from django.db.models import Count, Q
-
 def customer_list(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
