@@ -24,8 +24,7 @@ class UpdateUserForm(UserChangeForm):
 		self.fields['username'].widget.attrs['placeholder'] = 'User Name'
 		self.fields['username'].label = ''
 		self.fields['username'].help_text = '<span class="form-text text-muted"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
-  
-  
+    
 # Update User Password
 class ChangePasswordForm(SetPasswordForm):
 	class Meta:
@@ -73,20 +72,19 @@ class SignUpForm(UserCreationForm):
 		self.fields['password2'].label = ''
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
   
-  
-  
+# Form to Update Customer Details
 class UpdateCustomer(forms.ModelForm):
     
-    name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Customer Name'}), max_length=200, required=False)
-    main_contact = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Main Contact'}), max_length=200, required=False)
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email'}), required=False)
-    phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone'}), max_length=20, required=False)
-    industry = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Industry'}), max_length=100, required=False)
-    location = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Location'}), max_length=100, required=False)
-    account_manager = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Account Manager'}), max_length=200, required=False)
-    status = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Status'}), max_length=100, required=False)
-    notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes'}), required=False)
-    
+    name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Customer Name', 'class': 'form-control'}), max_length=200, required=False)
+    main_contact = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Main Contact','class': 'form-control'}), max_length=200, required=False)
+    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=False)
+    phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=20, required=False)
+    industry = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Industry', 'class': 'form-control'}), max_length=100, required=False)
+    location = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Location', 'class': 'form-control'}), max_length=100, required=False)
+    account_manager = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Account Manager', 'class': 'form-control'}), max_length=200, required=False)
+    status = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Status', 'class': 'form-control'}), max_length=100, required=False)
+    notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control'}), required=False)
+
     logo = forms.ImageField(label='', required=False)
 
     class Meta:
