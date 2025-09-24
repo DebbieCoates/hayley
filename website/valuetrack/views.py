@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Customer
+from .models import Customer, ProblemStatement
 from django.contrib import messages
 from .forms import UpdateCustomer, SignUpForm, UpdateUserForm, ChangePasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
 
 
 # Update User
@@ -118,10 +119,14 @@ def about(request):
 
 # view all customers
 def customer_list(request):
-    customers = Customer.objects.all()
-    return render(request, 'customer_list.html', {'customers': customers})  
+    customers = Customer.objects.annotate(
+        open_problems=Count('problem_statements', filter=Q(problem_statements__status='Open')),
+        closed_problems=Count('problem_statements', filter=Q(problem_statements__status='Closed'))
+    )
+    return render(request, 'customer_list.html', {'customers': customers})
 
-# view a single customer
+
+# view an individual customer
 def customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
     return render(request, 'customer.html', {'customer': customer})
