@@ -17,19 +17,40 @@ def about(request):
     return render(request, 'about.html')
 
 # View all problem statements
+from django.db.models import Count
+
 def problem_list(request):
-    sort = request.GET.get('sort', 'title')  # default sort field
-    direction = request.GET.get('direction', 'asc')  # default direction
+    sort = request.GET.get('sort', 'title')
+    direction = request.GET.get('direction', 'asc')
+    status_filter = request.GET.get('status')
+    urgency_filter = request.GET.get('urgency')
 
     order_by = sort if direction == 'asc' else f'-{sort}'
 
-    problems = ProblemStatement.objects.select_related('customer').order_by(order_by)
+    problems = ProblemStatement.objects.select_related('customer')
+
+    if status_filter:
+        problems = problems.filter(status=status_filter)
+    if urgency_filter:
+        problems = problems.filter(urgency=urgency_filter)
+
+    problems = problems.order_by(order_by)
+
+    # Summary counts
+    status_summary = ProblemStatement.objects.values('status').annotate(count=Count('id'))
+    urgency_summary = ProblemStatement.objects.values('urgency').annotate(count=Count('id'))
 
     return render(request, 'problem_list.html', {
         'problems': problems,
         'sort': sort,
-        'direction': direction
+        'direction': direction,
+        'status_filter': status_filter,
+        'urgency_filter': urgency_filter,
+        'status_summary': status_summary,
+        'urgency_summary': urgency_summary,
     })
+    
+    
 # View an individual problem statement
 def problem(request, problem_id):
     problem = ProblemStatement.objects.get(id=problem_id)
@@ -210,25 +231,41 @@ def register_user(request):
 def customer_list(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
+    status_filter = request.GET.get('status')
+
     order_by = sort if direction == 'asc' else f'-{sort}'
 
     customers = Customer.objects.annotate(
         open_problems=Count('problem_statements', filter=Q(problem_statements__status='Open')),
         closed_problems=Count('problem_statements', filter=Q(problem_statements__status='Closed'))
-    ).order_by(order_by)
+    )
+
+    if status_filter:
+        customers = customers.filter(status=status_filter)
+
+    customers = customers.order_by(order_by)
 
     # Totals across all customers
     total_customers = customers.count()
     total_open = sum(c.open_problems for c in customers)
     total_closed = sum(c.closed_problems for c in customers)
 
+    # Status summary
+    customer_status_summary = Customer.objects.values('status').annotate(count=Count('id'))
+
+    # Problem status summary
+    problem_status_summary = ProblemStatement.objects.values('status').annotate(count=Count('id'))
+
     return render(request, 'customer_list.html', {
         'customers': customers,
         'sort': sort,
         'direction': direction,
+        'status_filter': status_filter,
         'total_customers': total_customers,
         'total_open': total_open,
         'total_closed': total_closed,
+        'customer_status_summary': customer_status_summary,
+        'problem_status_summary': problem_status_summary,
     })
 
 # view an individual customer
