@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+problem_add.html
+
+<br/><br/>
+
+{% if customer %}
+  <h1>Add Problem Statement for {{ customer.name }}</h1>
+  <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary">Back to Customer</a>
+{% else %}
+  <h1>Add Problem Statement</h1>
+{% endif %}
+
+<br/><br/>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<br/><br/>
+
+
+
+
+
+{% endblock %}

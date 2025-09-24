@@ -5,15 +5,15 @@
 customer.html
 
     <br/><br/>    
-    <h1>Customer Details</h1>
-
-    {% if customer.logo %}
+    <h1>{{ customer.name }}</h1>
+    <br/>
+    {% comment %} {% if customer.logo %}
     <img src="{{ customer.logo.url }}"  style="max-width:200px; max-height:200px;"/>
     {% endif %}
     <br/><br/>  
-    <br/>
+    <br/> {% endcomment %}
 
-    <strong>Name:</strong> {{ customer.name }}<br/>
+    {% comment %} <strong>Name:</strong> {{ customer.name }}<br/> {% endcomment %}
     <strong>Contact:</strong> {{ customer.main_contact }}<br/>
     <strong>Phone:</strong> {{ customer.phone }}<br/>
     <strong>Email:</strong> {{ customer.email }}<br/>
@@ -29,6 +29,49 @@ customer.html
     
     <br/><br/>
     <a href="{% url 'customers' %}" class="btn btn-outline-primary">Back</a>
+
+    
+    <br/><br/>
+    {% comment %} <h2>Problem Statements</h2> {% endcomment %}
+
+    {% if problems %}
+    <h2>Problem Statements</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+        <tr>
+            <th>Problem</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Action</th>    
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for problem in problems %}
+            <tr>
+            <td>
+            <a href="{% url 'problem' problem.id %}" class="text-decoration-none text-primary">
+                {{ problem.title }}
+            </a>
+            </td>
+
+
+            <td>{{ problem.urgency }}</td>
+            <td>{{ problem.status }}</td>
+            <td><a href="{% url 'problem_edit' problem.id %}?next={% url 'customer' customer.id %}" class="btn btn-primary btn-sm">Edit</a>
+            <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No problem statements found for this customer.</p>
+    {% endif %}
+
+    {% comment %} <a href="{% url 'problem_add' customer.id %}" class="btn btn-primary btn-sm">Add</a> {% endcomment %}
+     <a href="{% url 'problem_add_from_customer' customer.id %}" class="btn btn-primary btn-sm">Add Problem</a>
+
 
 {% endblock %}
 

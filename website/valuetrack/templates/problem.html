@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+problem.html
+
+    <br/><br/>    
+    <h1>{{ problem.title }}</h1>
+    <br/>
+
+    <p>Customer: <a href="{% url 'customer' customer.id %}">{{ customer.name }}</a></p>
+        <p><strong>Contact:</strong> {{ customer.main_contact }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Phone:</strong> {{ customer.phone }}</p>
+
+    {% comment %} <strong>Name:</strong> {{ customer.name }}<br/> {% endcomment %}
+    <strong>Title:</strong> {{ problem.title }}<br/>
+    <strong>Description:</strong> {{ problem.description }}<br/>
+    <strong>Created At:</strong> {{ problem.impact }}<br/>
+    <strong>Updated At:</strong> {{ problem.urgency }}<br/>
+    <strong>Status:</strong> {{ problem.status }}<br/>
+    <strong>Notes:</strong> {{ problem.notes }}<br/>
+
+
+    <br/><br/>
+    <a href="" class="btn btn-primary">Edit</a>
+    <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn btn-sm btn-danger">Delete</a>
+    
+    <br/><br/>
+    <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary">Back to Customer</a>
+
+    
+    <br/><br/>
+
+
+
+
+
+{% endblock %}
+

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer    
+from .models import Customer, ProblemStatement   
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 
@@ -92,3 +92,29 @@ class UpdateCustomer(forms.ModelForm):
         model = Customer
         # Include all relevant fields for editing
         fields = ['name', 'main_contact', 'phone', 'email', 'account_manager', 'status', 'industry', 'location', 'notes', 'logo',]
+        
+        
+
+class UpdateProblem(forms.ModelForm):
+
+    customer = forms.ModelChoiceField(label='', queryset=Customer.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}), required=True)
+    
+    def __init__(self, *args, **kwargs):
+        customer = kwargs.pop('customer', None)
+        super().__init__(*args, **kwargs)
+
+        if customer:
+            self.fields['customer'].initial = customer
+            self.fields['customer'].widget = forms.HiddenInput()
+
+
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Problem Title', 'class': 'form-control'}), max_length=200, required=True)
+    description = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control', 'rows': 4}), required=True)
+    impact = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Impact', 'class': 'form-control', 'rows': 3}), required=False)
+    urgency = forms.ChoiceField(label='', choices=ProblemStatement._meta.get_field('urgency').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    status = forms.ChoiceField(label='', choices=ProblemStatement._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
+
+    class Meta:
+        model = ProblemStatement
+        fields = ['customer', 'title', 'description', 'impact', 'urgency', 'status', 'notes', ]

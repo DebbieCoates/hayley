@@ -20,4 +20,14 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('update_user/', views.update_user, name='update_user'),
     path('update_password/', views.update_password, name='update_password'),
+    
+    # Problem Statement URLs
+    path('problems/', views.problem_list, name='problems'),
+    path('problem/<int:problem_id>/', views.problem, name='problem'),
+    path('problem_delete/<int:problem_id>/', views.problem_delete, name='problem_delete'),
+    path('problem_edit/<int:problem_id>/', views.problem_edit, name='problem_edit'),
+    # path('problem_add/<int:customer_id>/', views.problem_add, name='problem_add')
+    
+    path('problem_add/', views.problem_add, name='problem_add'),
+    path('problem_add/<int:customer_id>/', views.problem_add_from_customer, name='problem_add_from_customer'),
 ]

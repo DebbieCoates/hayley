@@ -1,14 +1,104 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer, ProblemStatement
 from django.contrib import messages
-from .forms import UpdateCustomer, SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 
 
-# Update User
+
+# Create your views here.
+def home(request):
+    return render(request, 'home.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+# View all problem statements
+def problem_list(request):
+	problems = ProblemStatement.objects.all()
+	return render(request, 'problem_list.html', {'problems': problems})
+
+# View an individual problem statement
+def problem(request, problem_id):
+    problem = ProblemStatement.objects.get(id=problem_id)
+    customer = problem.customer  # access the related customer
+    return render(request, 'problem.html', {
+        'problem': problem,
+        'customer': customer
+    })
+
+
+
+# Delete a problem statement
+def problem_delete(request, problem_id):
+    problem = ProblemStatement.objects.get(id=problem_id)
+    customer_id = problem.customer.id  # capture before deletion
+    problem.delete()
+    messages.success(request, f'Problem "{problem.title}" deleted successfully.')
+
+    # Check if 'next' is passed in the query string
+    next_url = request.GET.get('next')
+    if next_url:
+        return redirect(next_url)
+
+    # Default fallback
+    return redirect('problems')
+
+def problem_edit(request, problem_id):
+    problem = get_object_or_404(ProblemStatement, id=problem_id)
+    customer = problem.customer
+
+    if request.method == 'POST':
+        form = UpdateProblem(request.POST, instance=problem)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Problem "{problem.title}" updated successfully.')
+            return redirect('problem', problem_id=problem.id)
+    else:
+        form = UpdateProblem(instance=problem)
+
+    return render(request, 'problem_edit.html', {
+        'form': form,
+        'problem': problem,
+        'customer': customer
+    })
+
+
+# Add a new problem statement for a specific customer
+def problem_add_from_customer(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+
+    if request.method == "POST":
+        form = UpdateProblem(request.POST)
+        if form.is_valid():
+            problem = form.save(commit=False)
+            problem.customer = customer
+            problem.save()
+            messages.success(request, "New Problem Statement Added Successfully!")
+            return redirect('customer', customer_id=customer.id)
+    else:
+        form = UpdateProblem(initial={'customer': customer})  # 👈 this pre-selects the customer
+
+    return render(request, 'problem_add.html', {'form': form, 'customer': customer})
+   
+   
+def problem_add(request):
+    if request.method == "POST":
+        form = UpdateProblem(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Problem added successfully.")
+            return redirect('problems')
+    else:
+        form = UpdateProblem()
+
+    return render(request, 'problem_add.html', {'form': form})
+
+ 
+# Update User Details    
 def update_user(request):
 	if request.user.is_authenticated:
 		# Get current user
@@ -27,7 +117,6 @@ def update_user(request):
 	else:
 		messages.success(request, "Must Be Logged In To View That Page...")
 		return redirect('login')
-
 
 # Update User Password
 def update_password(request):
@@ -61,8 +150,6 @@ def update_password(request):
 	else:
 		messages.success(request, "You Must Be Logged In To View That Page...")
 		return redirect('home') 
-
-
 
 #login
 def login_user(request):
@@ -110,13 +197,6 @@ def register_user(request):
 	else:
 		return render(request, 'register.html', {'form':form})
 
-# Create your views here.
-def home(request):
-    return render(request, 'home.html')
-
-def about(request):
-    return render(request, 'about.html')
-
 # view all customers
 def customer_list(request):
     customers = Customer.objects.annotate(
@@ -125,11 +205,14 @@ def customer_list(request):
     )
     return render(request, 'customer_list.html', {'customers': customers})
 
-
 # view an individual customer
 def customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
-    return render(request, 'customer.html', {'customer': customer})
+    problems = customer.problem_statements.all()  # uses the related_name from your model
+    return render(request, 'customer.html', {
+        'customer': customer,
+        'problems': problems
+    })
 
 # delete a customer
 def customer_delete(request, customer_id):

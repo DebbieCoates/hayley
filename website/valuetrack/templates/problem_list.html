@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+problem_list.html   
+
+    <br/><br/>    
+    <h1>Problem List</h1>
+    <br/>
+
+    <a href="{% url 'problem_add' %}" class="btn btn-primary btn-sm">Add Problem</a>
+
+    
+    <br/><br/>
+
+    <table class="table table-striped table-hover table-bordered" >
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Customer</th>
+                <th scope="col">Title</th>
+                <th scope="col">Impact</th>
+                <th scope="col">Urgency</th>
+                <th scope="col">Hayley Account Manager</th>    
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for problem in problems %}
+            <tr>
+            <td><a href="{% url 'customer' problem.customer.id %}">{{ problem.customer.name }}</a></td>
+            <td>{{ problem.title }}</td>
+            <td>{{ problem.impact }}</td>
+            <td>{{ problem.urgency }}</td>
+            <td>{{ customer.account_manager }}</td>
+            <td>{{ customer.status }}</td>
+            <td><a href="{% url 'problem_edit' problem.id %}" class="btn btn-primary btn-sm">Edit</a>
+            <a href="{% url 'problem_delete' problem.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+
