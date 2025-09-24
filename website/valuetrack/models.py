@@ -38,7 +38,19 @@ status_CHOICES = [
         ('Prospect', 'Prospect'),
         ('Other', 'Other')
     ]
-
+Urgency_CHOICES = [
+        ('Low', 'Low'),
+        ('Medium', 'Medium'),
+        ('High', 'High'),
+        ('Critical', 'Critical')
+    ]  
+ProblemStatus_CHOICES = [ 
+            ('Open', 'Open'),
+            ('In Progress', 'In Progress'),
+            ('Resolved', 'Resolved'),
+            ('Closed', 'Closed')
+        ]  
+       
 # Create your models here.
 class Customer(models.Model):
     name = models.CharField(max_length=100)
@@ -59,3 +71,21 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+    
+class ProblemStatement(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='problem_statements')
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    impact = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    urgency = models.CharField(max_length=50, choices=Urgency_CHOICES, blank=True, null=True, default='Medium')
+    status = models.CharField(max_length=50, choices=ProblemStatus_CHOICES, blank=True, null=True, default='Open')
+    notes = models.TextField(blank=True, null=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    archived = models.BooleanField(default=False)
+    
+
+    def __str__(self):
+        return f"{self.title} - {self.customer.name}"
