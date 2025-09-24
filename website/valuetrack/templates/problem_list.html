@@ -14,14 +14,31 @@ problem_list.html
     <br/><br/>
 
     <table class="table table-striped table-hover table-bordered" >
-        <thead class="table-dark">
+        <thead class="table-light">
             <tr>
-                <th scope="col">Customer</th>
-                <th scope="col">Title</th>
-                <th scope="col">Impact</th>
-                <th scope="col">Urgency</th>
-                <th scope="col">Hayley Account Manager</th>    
-                <th scope="col">Status</th>
+                <th><a href="?sort=customer__name&direction={% if sort == 'customer__name' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Customer {% if sort == 'customer__name' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a></th>
+
+                <th><a href="?sort=title&direction={% if sort == 'title' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Title {% if sort == 'title' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a></th>
+
+
+                {% comment %} <th scope="col">Impact</th> {% endcomment %}
+                <th><a href="?sort=urgency&direction={% if sort == 'urgency' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Urgency {% if sort == 'urgency' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a></th>
+
+                <th><a href="?sort=customer__account_manager&direction={% if sort == 'customer__account_manager' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Hayley Account Manager {% if sort == 'customer__account_manager' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a></th>
+
+                <th><a href="?sort=status&direction={% if sort == 'status' and direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Status {% if sort == 'status' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a></th>
+
+
                 <th scope="col">Actions</th>
 
             </tr>
@@ -31,12 +48,12 @@ problem_list.html
             <tr>
             <td><a href="{% url 'customer' problem.customer.id %}">{{ problem.customer.name }}</a></td>
             <td>{{ problem.title }}</td>
-            <td>{{ problem.impact }}</td>
+            {% comment %} <td>{{ problem.impact }}</td> {% endcomment %}
             <td>{{ problem.urgency }}</td>
-            <td>{{ customer.account_manager }}</td>
-            <td>{{ customer.status }}</td>
-            <td><a href="{% url 'problem_edit' problem.id %}" class="btn btn-primary btn-sm">Edit</a>
-            <a href="{% url 'problem_delete' problem.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+            <td>{{ problem.customer.account_manager }}</td>
+            <td>{{ problem.status }}</td>
+            <td><a href="{% url 'problem_edit' problem.id %}" class="btn btn-primary ">Edit</a>
+            <a href="{% url 'problem_delete' problem.id %}" class="btn btn-danger ">Delete</a></td>
 
             </tr>
         {% endfor %}

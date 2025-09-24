@@ -8,6 +8,13 @@ customer_list.html
     <h1>Customer List</h1>
     <br/>
 
+    <div class="summary">
+    <p><strong>Customers:</strong> {{ total_customers }}</p>
+    <p><strong>Open:</strong> {{ total_open }}</p>
+    <p><strong>Closed:</strong> {{ total_closed }}</p>
+    </div>
+
+
 
     <a href="{% url 'customer_add' %}" class="btn btn-success">Add Customer</a>
     <br/><br/>
@@ -17,7 +24,7 @@ customer_list.html
         <tr>
             <th><a href="?sort=name&direction={% if sort == 'name' and direction == 'asc' %}desc{% else %}asc{% endif %}">Name {% if sort == 'name' %} {% if direction == 'asc' %} ↑ {% else %} ↓ {% endif %} {% endif %}</a></th>
             <th><a href="?sort=main_contact&direction={% if sort == 'main_contact' and direction == 'asc' %}desc{% else %}asc{% endif %}">Contact{% if sort == 'main_contact' %} {% if direction == 'asc' %} ↑ {% else %} ↓ {% endif %} {% endif %}</a></th>
-            <th><a href="?sort=phone&direction={% if sort == 'phone' and direction == 'asc' %}desc{% else %}asc{% endif %}">Phone</a></th>
+            <th>Phone</a></th>
             <th><a href="?sort=email&direction={% if sort == 'email' and direction == 'asc' %}desc{% else %}asc{% endif %}">Email{% if sort == 'email' %} {% if direction == 'asc' %} ↑ {% else %} ↓ {% endif %} {% endif %}</a></th>
             <th><a href="?sort=account_manager&direction={% if sort == 'account_manager' and direction == 'asc' %}desc{% else %}asc{% endif %}">Haley Account Manager{% if sort == 'account_manager' %} {% if direction == 'asc' %} ↑ {% else %} ↓ {% endif %} {% endif %}</a></th>
             <th><a href="?sort=status&direction={% if sort == 'status' and direction == 'asc' %}desc{% else %}asc{% endif %}">Status{% if sort == 'status' %} {% if direction == 'asc' %} ↑ {% else %} ↓ {% endif %} {% endif %}</a></th>

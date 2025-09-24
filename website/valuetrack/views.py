@@ -18,9 +18,18 @@ def about(request):
 
 # View all problem statements
 def problem_list(request):
-	problems = ProblemStatement.objects.all()
-	return render(request, 'problem_list.html', {'problems': problems})
+    sort = request.GET.get('sort', 'title')  # default sort field
+    direction = request.GET.get('direction', 'asc')  # default direction
 
+    order_by = sort if direction == 'asc' else f'-{sort}'
+
+    problems = ProblemStatement.objects.select_related('customer').order_by(order_by)
+
+    return render(request, 'problem_list.html', {
+        'problems': problems,
+        'sort': sort,
+        'direction': direction
+    })
 # View an individual problem statement
 def problem(request, problem_id):
     problem = ProblemStatement.objects.get(id=problem_id)
@@ -198,11 +207,9 @@ def register_user(request):
 		return render(request, 'register.html', {'form':form})
 
 # view all customers
-
 def customer_list(request):
-    sort = request.GET.get('sort', 'name')  # default sort field
-    direction = request.GET.get('direction', 'asc')  # default direction
-
+    sort = request.GET.get('sort', 'name')
+    direction = request.GET.get('direction', 'asc')
     order_by = sort if direction == 'asc' else f'-{sort}'
 
     customers = Customer.objects.annotate(
@@ -210,19 +217,30 @@ def customer_list(request):
         closed_problems=Count('problem_statements', filter=Q(problem_statements__status='Closed'))
     ).order_by(order_by)
 
+    # Totals across all customers
+    total_customers = customers.count()
+    total_open = sum(c.open_problems for c in customers)
+    total_closed = sum(c.closed_problems for c in customers)
+
     return render(request, 'customer_list.html', {
         'customers': customers,
         'sort': sort,
-        'direction': direction
+        'direction': direction,
+        'total_customers': total_customers,
+        'total_open': total_open,
+        'total_closed': total_closed,
     })
 
 # view an individual customer
 def customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
-    problems = customer.problem_statements.all()  # uses the related_name from your model
+    problems = customer.problem_statements.all()
+    problem_count = problems.count()
+
     return render(request, 'customer.html', {
         'customer': customer,
-        'problems': problems
+        'problems': problems,
+        'problem_count': problem_count
     })
 
 # delete a customer
