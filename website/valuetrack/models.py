@@ -77,8 +77,6 @@ class ProblemStatement(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     impact = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     urgency = models.CharField(max_length=50, choices=Urgency_CHOICES, blank=True, null=True, default='Medium')
     status = models.CharField(max_length=50, choices=ProblemStatus_CHOICES, blank=True, null=True, default='Open')
     notes = models.TextField(blank=True, null=True) 
