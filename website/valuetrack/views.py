@@ -228,10 +228,13 @@ def register_user(request):
 		return render(request, 'register.html', {'form':form})
 
 # view all customers
+from django.db.models import Count, Q
+
 def customer_list(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
     status_filter = request.GET.get('status')
+    problem_status_filter = request.GET.get('problem_status')
 
     order_by = sort if direction == 'asc' else f'-{sort}'
 
@@ -243,17 +246,16 @@ def customer_list(request):
     if status_filter:
         customers = customers.filter(status=status_filter)
 
+    if problem_status_filter:
+        customers = customers.filter(problem_statements__status=problem_status_filter).distinct()
+
     customers = customers.order_by(order_by)
 
-    # Totals across all customers
     total_customers = customers.count()
     total_open = sum(c.open_problems for c in customers)
     total_closed = sum(c.closed_problems for c in customers)
 
-    # Status summary
     customer_status_summary = Customer.objects.values('status').annotate(count=Count('id'))
-
-    # Problem status summary
     problem_status_summary = ProblemStatement.objects.values('status').annotate(count=Count('id'))
 
     return render(request, 'customer_list.html', {
@@ -261,6 +263,7 @@ def customer_list(request):
         'sort': sort,
         'direction': direction,
         'status_filter': status_filter,
+        'problem_status_filter': problem_status_filter,
         'total_customers': total_customers,
         'total_open': total_open,
         'total_closed': total_closed,
