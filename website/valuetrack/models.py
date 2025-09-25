@@ -127,50 +127,49 @@ class Provider(models.Model):
     def __str__(self):
         return f"{self.name} ({self.type})"
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 class Service(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    category = models.CharField(max_length=100, blank=True, null=True)
-    
-    # ✅ Many-to-many relationship
-    providers = models.ManyToManyField('Provider', through='ServiceProvider', related_name='services')
-
-    notes = models.TextField(blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='services')
+    tags = models.CharField(max_length=255, blank=True)
     active = models.BooleanField(default=True)
 
-    # ✅ Tagging
-    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
-
-    # ✅ Audit Trail
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='services_created')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
     
-    
-class ServiceProvider(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, related_name='service_links')
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    region = models.CharField(max_length=100, blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-    available = models.BooleanField(default=True)
+class Solution(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='solutions')
+    providers = models.ManyToManyField(Provider, related_name='solutions')
+    tags = models.CharField(max_length=255, blank=True)
+    budget_eligible = models.BooleanField(default=False)
 
-    # ✅ Tagging
-    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
-
-    # ✅ Audit Trail
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='service_provider_links_created')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['service', 'provider'], name='unique_service_provider')
-        ]
-        
     def __str__(self):
-        return f"{self.provider.name} provides {self.service.name}"
+        return self.name
+    
+class ProblemSolutionLink(models.Model):
+    problem = models.ForeignKey(ProblemStatement, on_delete=models.CASCADE, related_name='solutions')
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE, related_name='problems')
+    notes = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Solution '{self.solution.name}' for Problem '{self.problem.title}'"

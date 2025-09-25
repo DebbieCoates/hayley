@@ -59,3 +59,197 @@
 | `updated_at`   | Timestamp when the link was last updated |
 | `created_by`   | User who created the link between provider and service |
 | `Meta.constraints` | Ensures each provider-service pair is unique (`unique_service_provider`) |
+
+
+### 🧾 Category
+
+| Field         | Type         | Description                          |
+|---------------|--------------|--------------------------------------|
+| id            | AutoField    | Primary key                          |
+| name          | CharField    | Unique name of the category          |
+| description   | TextField    | Optional description                 |
+
+🔗 Relationships:
+- One-to-many with `Service` (via `category`)
+
+
+### Service
+
+| Field         | Type         | Description                          |
+|---------------|--------------|--------------------------------------|
+| id            | AutoField    | Primary key                          |
+| name          | CharField    | Name of the service                  |
+| description   | TextField    | Optional description                 |
+| category      | ForeignKey   | Linked to `Category`                 |
+| tags          | CharField    | Comma-separated keywords             |
+| active        | BooleanField | Whether the service is active        |
+| created_by    | ForeignKey   | Linked to `User`                     |
+| created_at    | DateTime     | Timestamp of creation                |
+| updated_at    | DateTime     | Timestamp of last update             |
+
+🔗 Relationships:
+- Many-to-one with `Category`
+- One-to-many with `Solution`
+
+### Solution
+
+| Field           | Type           | Description                          |
+|-----------------|----------------|--------------------------------------|
+| id              | AutoField      | Primary key                          |
+| name            | CharField      | Name of the solution                 |
+| description     | TextField      | Optional description                 |
+| service         | ForeignKey     | Linked to `Service`                  |
+| providers       | ManyToMany     | Linked to multiple `Provider`s       |
+| tags            | CharField      | Comma-separated keywords             |
+| budget_eligible | BooleanField   | Whether it's budget eligible         |
+| created_by      | ForeignKey     | Linked to `User`                     |
+| created_at      | DateTime       | Timestamp of creation                |
+| updated_at      | DateTime       | Timestamp of last update             |
+
+🔗 Relationships:
+- Many-to-one with `Service`
+- Many-to-many with `Provider`
+- Many-to-many with `ProblemStatement` (via `ProblemSolutionLink`)
+
+
+### ProblemSolutionLink
+
+| Field         | Type         | Description                          |
+|---------------|--------------|--------------------------------------|
+| id            | AutoField    | Primary key                          |
+| problem       | ForeignKey   | Linked to `ProblemStatement`         |
+| solution      | ForeignKey   | Linked to `Solution`                 |
+| notes         | TextField    | Optional notes                       |
+| created_at    | DateTime     | Timestamp of creation                |
+| updated_at    | DateTime     | Timestamp of last update             |
+
+🔗 Relationships:
+- Many-to-one with `ProblemStatement`
+- Many-to-one with `Solution`
+
+# 📘 Entity Relationship Diagram
+
+## 🧍 Customer
+- `id`: AutoField (PK)
+- `name`: CharField
+- `main_contact`: CharField
+- `email`: EmailField
+- `phone`: CharField
+- `industry`: CharField (choices)
+- `location`: CharField (choices)
+- `account_manager`: CharField
+- `status`: CharField (choices)
+- `notes`: TextField
+- `logo`: ImageField
+- `archived`: BooleanField
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- 1️⃣→∞ `ProblemStatement.customer`
+
+---
+
+## 🧠 ProblemStatement
+- `id`: AutoField (PK)
+- `customer_id`: FK → Customer
+- `title`: CharField
+- `description`: TextField
+- `impact`: TextField
+- `urgency`: CharField (choices)
+- `status`: CharField (choices)
+- `notes`: TextField
+- `archived`: BooleanField
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- ∞→1️⃣ `Customer`
+- ∞→∞ `Solution` via `ProblemSolutionLink`
+
+---
+
+## 🏢 Provider
+- `id`: AutoField (PK)
+- `name`: CharField
+- `type`: CharField (choices)
+- `department`: CharField
+- `contact_name`: CharField
+- `email`: EmailField
+- `phone`: CharField
+- `address`: CharField
+- `address2`: CharField
+- `city`: CharField
+- `county`: CharField
+- `postcode`: CharField
+- `country`: CharField
+- `notes`: TextField
+- `status`: CharField (choices)
+- `website`: URLField
+- `industry`: CharField (choices)
+- `tags`: CharField
+- `created_by`: FK → User
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- ∞→∞ `Solution.providers`
+
+---
+
+## 🗂️ Category
+- `id`: AutoField (PK)
+- `name`: CharField (unique)
+- `description`: TextField
+
+🔗 **Relationships**
+- 1️⃣→∞ `Service.category`
+
+---
+
+## 🛠️ Service
+- `id`: AutoField (PK)
+- `name`: CharField
+- `description`: TextField
+- `category_id`: FK → Category
+- `tags`: CharField
+- `active`: BooleanField
+- `created_by`: FK → User
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- ∞→1️⃣ `Category`
+- 1️⃣→∞ `Solution.service`
+
+---
+
+## 💡 Solution
+- `id`: AutoField (PK)
+- `name`: CharField
+- `description`: TextField
+- `service_id`: FK → Service
+- `tags`: CharField
+- `budget_eligible`: BooleanField
+- `created_by`: FK → User
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- ∞→1️⃣ `Service`
+- ∞→∞ `Provider`
+- ∞→∞ `ProblemStatement` via `ProblemSolutionLink`
+
+---
+
+## 🔗 ProblemSolutionLink
+- `id`: AutoField (PK)
+- `problem_id`: FK → ProblemStatement
+- `solution_id`: FK → Solution
+- `notes`: TextField
+- `created_at`: DateTimeField
+- `updated_at`: DateTimeField
+
+🔗 **Relationships**
+- ∞→1️⃣ `ProblemStatement`
+- ∞→1️⃣ `Solution`
