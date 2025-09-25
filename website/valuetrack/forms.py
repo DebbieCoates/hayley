@@ -1,10 +1,11 @@
 from django import forms
-from .models import Customer, ProblemStatement   
+from .models import Customer, ProblemStatement, Provider   
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 
   
-# Update User Info
+
+# Update User Details
 class UpdateUserForm(UserChangeForm):
 	# Hide Password Stuff
 	password = None
@@ -93,8 +94,7 @@ class UpdateCustomer(forms.ModelForm):
         # Include all relevant fields for editing
         fields = ['name', 'main_contact', 'phone', 'email', 'account_manager', 'status', 'industry', 'location', 'notes', 'logo',]
         
-        
-
+# Form to Update Problem Statement Details        
 class UpdateProblem(forms.ModelForm):
 
     customer = forms.ModelChoiceField(label='', queryset=Customer.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}), required=True)
@@ -118,3 +118,26 @@ class UpdateProblem(forms.ModelForm):
     class Meta:
         model = ProblemStatement
         fields = ['customer', 'title', 'description', 'impact', 'urgency', 'status', 'notes', ]
+        
+        
+class UpdateProvider(forms.ModelForm):
+	name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Provider Name', 'class': 'form-control'}), max_length=200, required=True)
+	type = forms.ChoiceField(label='', choices=Provider._meta.get_field('type').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)	
+	department = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Department', 'class': 'form-control'}), max_length=200, required=False)
+	contact_name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Contact Name', 'class': 'form-control'}), max_length=200, required=True)
+	email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=True)
+	phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=50, required=True)			
+	address = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address', 'class': 'form-control'}), max_length=255, required=True)
+	address2 = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address 2', 'class': 'form-control'}), max_length=255, required=False)
+	city = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'City', 'class': 'form-control'}), max_length=100, required=True)
+	county = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'County', 'class': 'form-control'}), max_length=100, required=False)
+	postcode = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Postcode', 'class': 'form-control'}), max_length=20, required=True)
+	country = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Country', 'class': 'form-control'}), max_length=100, required=True)
+	notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
+	
+	tags = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Tags (comma-separated)', 'class': 'form-control'}), max_length=255, required=False)		
+ 
+	class Meta:
+		model = Provider
+		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'tags']
+  

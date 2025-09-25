@@ -1,45 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-class Provider(models.Model):
-    TYPE_CHOICES = [
+ProviderStatus_CHOICES = [
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),]
+    
+ProviderType_CHOICES = [
         ('Internal', 'Internal'),
         ('External', 'External'),
         ('Partner', 'Partner'),
     ]
-
-    name = models.CharField(max_length=255)
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    department = models.CharField(max_length=255, blank=True, null=True)
-    contact_name = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=50)
-    address = models.CharField(max_length=255)
-    address2 = models.CharField(max_length=255, blank=True, null=True)
-    city = models.CharField(max_length=100)
-    county = models.CharField(max_length=100)
-    postcode = models.CharField(max_length=20)
-    country = models.CharField(max_length=100)
-    notes = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=50, choices=[
-        ('Active', 'Active'),
-        ('Inactive', 'Inactive')
-    ])
-
-    # ✅ Tagging
-    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
-
-    # ✅ Audit Trail
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='providers_created')
-
-    def __str__(self):
-        return f"{self.name} ({self.type})"
-
-
-
 Industry_CHOICES = [
         ('Tech', 'Technology'), 
         ('Finance', 'Finance'), 
@@ -103,7 +73,7 @@ class Customer(models.Model):
     status = models.CharField(max_length=50, choices=status_CHOICES, blank=True, null=True, default='Active')
     notes = models.TextField(blank=True, null=True) 
     logo = models.ImageField(upload_to='customer_logos/', blank=True, null=True)
-     
+    # ✅ Audit Trail   
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     archived = models.BooleanField(default=False)
@@ -120,6 +90,7 @@ class ProblemStatement(models.Model):
     urgency = models.CharField(max_length=50, choices=Urgency_CHOICES, blank=True, null=True, default='Medium')
     status = models.CharField(max_length=50, choices=ProblemStatus_CHOICES, blank=True, null=True, default='Open')
     notes = models.TextField(blank=True, null=True) 
+    # ✅ Audit Trail
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     archived = models.BooleanField(default=False)
@@ -127,3 +98,31 @@ class ProblemStatement(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.customer.name}"
+    
+class Provider(models.Model):
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=20, choices=ProviderType_CHOICES, default='External')
+
+    department = models.CharField(max_length=255, blank=True, null=True)
+    contact_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=50)
+    address = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100)
+    county = models.CharField(max_length=100)
+    postcode = models.CharField(max_length=20)
+    country = models.CharField(max_length=100)
+    notes = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=50, choices=ProviderStatus_CHOICES, default='Active')
+
+    # ✅ Tagging
+    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
+
+    # ✅ Audit Trail
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='providers_created')
+
+    def __str__(self):
+        return f"{self.name} ({self.type})"

@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer, ProblemStatement, Provider
 from django.contrib import messages
-from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem
+from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem, UpdateProvider
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 
+# View all providers
 def provider_list(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
@@ -34,14 +35,26 @@ def provider_list(request):
 def provider(request):
     pass
 
-def provider_delete(request):
-    pass
+# Delete a provider
+def provider_delete(request, provider_id):
+    provider = get_object_or_404(Provider, id=provider_id)
+    provider.delete()
+    messages.success(request, f'Provider "{provider.name}" deleted successfully.')
+    return redirect('providers')
 
 def provider_edit(request):
     pass
 
 def provider_add(request):
-    pass
+    if request.method == 'POST':
+        form = UpdateProvider(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'New provider added successfully.')
+            return redirect('providers')
+    else:
+        form = UpdateProvider()
+    return render(request, 'provider_add.html', {'form': form})
 
 
 # Create your views here.
