@@ -32,8 +32,11 @@ def provider_list(request):
         'provider_status_summary': provider_status_summary,
     })
     
-def provider(request):
-    pass
+# View an individual provider
+def provider(request, provider_id):
+    provider = get_object_or_404(Provider, id=provider_id)
+    return render(request, 'provider.html', {'provider': provider})
+
 
 # Delete a provider
 def provider_delete(request, provider_id):

@@ -40,6 +40,7 @@ provider_list.html
           {% for item in provider_status_summary %}
             <li class="list-inline-item"><strong>{{ item.status }}:</strong> {{ item.count }}</li>
           {% endfor %}
+          <li class="list-inline-item"><strong>Total:</strong> {{ providers|length }}</li>
         </ul>
       </div>
     </div>
@@ -79,7 +80,7 @@ provider_list.html
   <tbody>
     {% for provider in providers %}
     <tr>
-      <td><a href="">{{ provider.name }}</a></td>
+      <td><a href="{% url 'provider' provider.id %}">{{ provider.name }}</a></td>
       <td>{{ provider.type }}</td>
       <td>{{ provider.contact_name }}</td>
       <td>{{ provider.email }}</td>

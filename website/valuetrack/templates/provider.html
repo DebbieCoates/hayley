@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+provider.html
+
+    <br/><br/>    
+    <h1>{{ provider.name }}</h1>
+    <br/>
+
+    {% comment %} <strong>Name:</strong> {{ customer.name }}<br/> {% endcomment %}
+    <strong>Contact:</strong> {{ provider.name}}<br/>
+    <strong>Type:</strong> {{ provider.type}}<br/>
+
+    <strong>Contact Name:</strong> {{ provider.contact_name}}<br/>
+
+    <strong>Email:</strong> {{ provider.email}}<br/>
+    <strong>Phone:</strong> {{ provider.phone}}<br/>
+
+    <strong>Address:</strong> {{ provider.address}}<br/>
+    <strong>Address 2:</strong> {{ provider.address2}}<br/>
+    <strong>City:</strong> {{ provider.city}}<br/>
+    <strong>County:</strong> {{ provider.county}}<br/>
+    <strong>Postcode:</strong> {{ provider.postcode}}<br/>
+    <strong>Country:</strong> {{ provider.country}}<br/>
+    {% comment %} <strong>Website:</strong> <a href="{{ provider.website}}" target="_blank">{{ provider.website}}</a><br/> {% endcomment %}
+    <strong>Notes:</strong> {{ provider.notes}}<br/>    
+
+    <strong>Tags:</strong> {{ provider.tags}}<br/>    
+
+    <strong>Status:</strong> {{ provider.status}}<br/>
+
+    <br/><br/>
+    <a href="{% url 'provider_delete' provider.id %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'provider_edit' provider.id %}" class="btn btn-primary">Edit</a>
+        
+    <br/><br/>
+    <a href="{% url 'providers' %}" class="btn btn-outline-primary">Back to Providers</a>
+
+
+
+
+{% endblock %}
+
