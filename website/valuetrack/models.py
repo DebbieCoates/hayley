@@ -8,7 +8,7 @@ ProviderStatus_CHOICES = [
 ProviderType_CHOICES = [
         ('Internal', 'Internal'),
         ('External', 'External'),
-        ('Partner', 'Partner'),
+        ('Partner', 'Partner')
     ]
 Industry_CHOICES = [
         ('Tech', 'Technology'), 
@@ -102,7 +102,6 @@ class ProblemStatement(models.Model):
 class Provider(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=ProviderType_CHOICES, default='External')
-
     department = models.CharField(max_length=255, blank=True, null=True)
     contact_name = models.CharField(max_length=255)
     email = models.EmailField()

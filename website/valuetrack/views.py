@@ -45,6 +45,7 @@ def provider_delete(request, provider_id):
 def provider_edit(request):
     pass
 
+# Add a new provider
 def provider_add(request):
     if request.method == 'POST':
         form = UpdateProvider(request.POST)
@@ -55,7 +56,6 @@ def provider_add(request):
     else:
         form = UpdateProvider()
     return render(request, 'provider_add.html', {'form': form})
-
 
 # Create your views here.
 def home(request):

@@ -123,21 +123,26 @@ class UpdateProblem(forms.ModelForm):
 class UpdateProvider(forms.ModelForm):
 	name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Provider Name', 'class': 'form-control'}), max_length=200, required=True)
 	type = forms.ChoiceField(label='', choices=Provider._meta.get_field('type').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)	
-	department = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Department', 'class': 'form-control'}), max_length=200, required=False)
+	department = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Department (if applicable)', 'class': 'form-control'}), max_length=200, required=False)
 	contact_name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Contact Name', 'class': 'form-control'}), max_length=200, required=True)
-	email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=True)
-	phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=50, required=True)			
-	address = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address', 'class': 'form-control'}), max_length=255, required=True)
-	address2 = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address 2', 'class': 'form-control'}), max_length=255, required=False)
-	city = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'City', 'class': 'form-control'}), max_length=100, required=True)
+	email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=False)
+	phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=20, required=False)
+	address = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address', 'class': 'form-control'}), max_length=300, required=False)		
+	address2 = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Address 2', 'class': 'form-control'}), max_length=300, required=False)
+	city = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'City', 'class': 'form-control'}), max_length=100, required=False)
 	county = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'County', 'class': 'form-control'}), max_length=100, required=False)
-	postcode = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Postcode', 'class': 'form-control'}), max_length=20, required=True)
-	country = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Country', 'class': 'form-control'}), max_length=100, required=True)
+	postcode = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Postcode', 'class': 'form-control'}), max_length=20, required=False)
+	country = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Country', 'class': 'form-control'}), max_length=100, required=False)
 	notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
-	status = forms.ChoiceField(label='', choices=Provider._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
-	tags = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Tags (comma-separated)', 'class': 'form-control'}), max_length=255, required=False)		
+	status = forms.ChoiceField(label='', choices=Provider._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)
+	tags = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Tags (comma-separated)', 'class': 'form-control'}), max_length=255, required=False)
  
+	# Set default value for 'type' field to 'External'
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		if not self.initial.get('type') and not self.data.get('type'):
+			self.fields['type'].initial = 'External'
+
 	class Meta:
 		model = Provider
 		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags']
-  
