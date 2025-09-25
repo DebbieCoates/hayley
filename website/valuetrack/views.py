@@ -10,39 +10,6 @@ from django.db.models import Count, Q
 
 
 
-# View all categories
-def category_list(request):
-    categories = Category.objects.all()
-    form = CategoryForm()
-    return render(request, 'category_list.html', {
-        'categories': categories,
-        'form': form
-    })
-
-def category_add(request):
-    form = CategoryForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('category_list')
-    return render(request, 'category_list.html', {'form': form})
-
-def category_edit(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    form = CategoryForm(request.POST or None, instance=category)
-    if form.is_valid():
-        form.save()
-        return redirect('category_list')
-    return render(request, 'category_list.html', {'form': form})
-
-def category_delete(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    category.delete()
-    messages.success(request, f'Category "{category.name}" deleted successfully.')
-    return redirect('category_list')
-
-
-
-
 
 # Create your views here.
 def home(request):
@@ -54,6 +21,38 @@ def about(request):
 
 
 
+# View all categories
+def category_list(request):
+    categories = Category.objects.all()
+    form = CategoryForm()
+    return render(request, 'category_list.html', {
+        'categories': categories,
+        'form': form
+    })
+
+# Add a new category
+def category_add(request):
+    form = CategoryForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('category_list')
+    return render(request, 'category_list.html', {'form': form})
+
+# Edit an existing category
+def category_edit(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    form = CategoryForm(request.POST or None, instance=category)
+    if form.is_valid():
+        form.save()
+        return redirect('category_list')
+    return render(request, 'category_list.html', {'form': form})
+
+# Delete a category
+def category_delete(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    messages.success(request, f'Category "{category.name}" deleted successfully.')
+    return redirect('category_list')
 
 # View all providers
 def provider_list(request):
