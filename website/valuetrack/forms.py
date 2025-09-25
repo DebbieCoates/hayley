@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, ProblemStatement, Provider, Category
+from .models import Customer, ProblemStatement, Provider, Category, Service
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 
@@ -157,3 +157,9 @@ class UpdateProvider(forms.ModelForm):
 	class Meta:
 		model = Provider
 		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags', 'website', 'industry',]
+
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['name', 'description', 'category', 'tags', 'active']

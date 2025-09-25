@@ -4,7 +4,9 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    # path('', views.home, name='home'),# Home page
+    path('', views.customer_list, name='home'),
+    
     path('about/', views.about, name='about'),
     
     # Customer URLs
@@ -41,6 +43,12 @@ urlpatterns = [
     path('category_add/', views.category_add, name='category_add'),
     path('category_edit/<int:pk>/', views.category_edit, name='category_edit'),
     path('category_delete/<int:pk>/', views.category_delete, name='category_delete'),
+    
+    # Service URLs
+    path('services/', views.service_list, name='service_list'),
+    path('services/add/', views.service_add, name='service_add'),
+    path('services/<int:pk>/edit/', views.service_edit, name='service_edit'),
+    path('services/<int:pk>/delete/', views.service_delete, name='service_delete'),
 ]
 
   

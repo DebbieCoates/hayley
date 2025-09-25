@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, ProblemStatement, Provider, Category
+from .models import Customer, ProblemStatement, Provider, Category, Service
 from django.contrib import messages
-from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem, UpdateProvider, CategoryForm   
+from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem, UpdateProvider, CategoryForm  , ServiceForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,33 @@ from django.db.models import Count, Q
 
 
 
+def service_list(request):
+    services = Service.objects.select_related('category').all()
+    form = ServiceForm()
+    return render(request, 'service_list.html', {'services': services, 'form': form})
+
+def service_add(request):
+    form = ServiceForm(request.POST or None)
+    if form.is_valid():
+        service = form.save(commit=False)
+        service.created_by = request.user
+        service.save()
+        return redirect('service_list')
+    return render(request, 'services/form.html', {'form': form})
+
+def service_edit(request, pk):
+    service = get_object_or_404(Service, pk=pk)
+    form = ServiceForm(request.POST or None, instance=service)
+    if form.is_valid():
+        form.save()
+        return redirect('service_list')
+    return render(request, 'services/form.html', {'form': form})
+
+def service_delete(request, pk):
+    service = get_object_or_404(Service, pk=pk)
+    service.delete()
+    messages.success(request, f'Service "{service.name}" deleted successfully.')
+    return redirect('service_list')
 
 
 # Create your views here.
@@ -18,7 +45,6 @@ def home(request):
 # About page
 def about(request):
     return render(request, 'about.html')
-
 
 
 # View all categories
