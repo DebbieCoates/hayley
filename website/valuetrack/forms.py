@@ -136,13 +136,19 @@ class UpdateProvider(forms.ModelForm):
 	notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
 	status = forms.ChoiceField(label='', choices=Provider._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)
 	tags = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Tags (comma-separated)', 'class': 'form-control'}), max_length=255, required=False)
- 
-	# Set default value for 'type' field to 'External'
+	website = forms.URLField(label='', widget=forms.URLInput(attrs={'placeholder': 'Website', 'class': 'form-control'}), required=False)	
+	industry = forms.ChoiceField(label='', choices=Provider._meta.get_field('industry').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)
+
+	# Set default values
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		if not self.initial.get('type') and not self.data.get('type'):
 			self.fields['type'].initial = 'External'
 
+		if not self.initial.get('industry') and not self.data.get('industry'):
+			self.fields['industry'].initial = 'Other'
+
+
 	class Meta:
 		model = Provider
-		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags']
+		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags', 'website', 'industry',]

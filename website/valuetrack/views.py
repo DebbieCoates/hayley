@@ -45,8 +45,22 @@ def provider_delete(request, provider_id):
     messages.success(request, f'Provider "{provider.name}" deleted successfully.')
     return redirect('providers')
 
-def provider_edit(request):
-    pass
+def provider_edit(request, provider_id):
+    provider = get_object_or_404(Provider, id=provider_id)
+
+    if request.method == 'POST':
+        form = UpdateProvider(request.POST, instance=provider)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Provider "{provider.name}" updated successfully.')
+            return redirect('provider', provider_id=provider.id)
+    else:
+        form = UpdateProvider(instance=provider)
+
+    return render(request, 'provider_edit.html', {
+        'form': form,
+        'provider': provider
+    })
 
 # Add a new provider
 def provider_add(request):

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+provider_edit.html
+
+    <br/><br/>    
+    <h1>Edit Provider</h1>
+    <br/>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'provider_edit' provider.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+         <br/><br/>
+        <button type="submit" class="btn btn-primary">Save Changes</button>  
+    </form> 
+
+    <br/><br/>
+    <a href="{% url 'providers' %}" class="btn btn-outline-primary">Back</a>
+
+{% endblock %}
+

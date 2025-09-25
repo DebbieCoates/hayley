@@ -114,6 +114,9 @@ class Provider(models.Model):
     country = models.CharField(max_length=100)
     notes = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=50, choices=ProviderStatus_CHOICES, default='Active')
+    website = models.URLField(blank=True, null=True)
+    industry = models.CharField(max_length=100, choices=Industry_CHOICES, blank=True, null=True, default='Other')
+    # services_offered = models.TextField(blank=True, null=True)  
 
     # ✅ Tagging
     tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")

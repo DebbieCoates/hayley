@@ -67,13 +67,14 @@ provider_list.html
           Contact Name {% if sort == 'contact_name' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
         </a>
       </th>
-      <th>Email</th>
+      {% comment %} <th>Email</th> {% endcomment %}
       <th>Phone</th>
       <th>
         <a href="?sort=status&direction={% if sort == 'status' and direction == 'asc' %}desc{% else %}asc{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
           Status {% if sort == 'status' %}{% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
         </a>
       </th>
+      <th>Website</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -83,11 +84,12 @@ provider_list.html
       <td><a href="{% url 'provider' provider.id %}">{{ provider.name }}</a></td>
       <td>{{ provider.type }}</td>
       <td>{{ provider.contact_name }}</td>
-      <td>{{ provider.email }}</td>
+      {% comment %} <td>{{ provider.email }}</td> {% endcomment %}
       <td>{{ provider.phone }}</td>
       <td>{{ provider.status }}</td>
+      <td><a href="{{ provider.website }}" target="_blank">{{ provider.website }}</a></td>
       <td>
-        <a href="" class="btn btn-primary">Edit</a>
+        <a href="{% url 'provider_edit' provider.id %}" class="btn btn-primary">Edit</a>
        <a href="{% url 'provider_delete' provider.id %}" class="btn btn-danger">Delete</a>
       </td>
     </tr>
