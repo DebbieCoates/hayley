@@ -36,6 +36,11 @@ urlpatterns = [
     path('provider_edit/<int:provider_id>/', views.provider_edit, name='provider_edit'),
     path('provider_add/', views.provider_add, name='provider_add'),
     
- 
-  
+    # Category URLs
+    path('categories/', views.category_list, name='category_list'),
+    path('category_add/', views.category_add, name='category_add'),
+    path('category_edit/<int:pk>/', views.category_edit, name='category_edit'),
+    path('category_delete/<int:pk>/', views.category_delete, name='category_delete'),
 ]
+
+  

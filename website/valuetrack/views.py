@@ -1,11 +1,45 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, ProblemStatement, Provider
+from .models import Customer, ProblemStatement, Provider, Category
 from django.contrib import messages
-from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem, UpdateProvider
+from .forms import UpdateCustomer, SignUpForm, UpdateProblem, UpdateUserForm, ChangePasswordForm, UpdateProblem, UpdateProvider, CategoryForm   
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+
+
+
+
+# View all categories
+def category_list(request):
+    categories = Category.objects.all()
+    form = CategoryForm()
+    return render(request, 'category_list.html', {
+        'categories': categories,
+        'form': form
+    })
+
+def category_add(request):
+    form = CategoryForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('category_list')
+    return render(request, 'category_list.html', {'form': form})
+
+def category_edit(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    form = CategoryForm(request.POST or None, instance=category)
+    if form.is_valid():
+        form.save()
+        return redirect('category_list')
+    return render(request, 'category_list.html', {'form': form})
+
+def category_delete(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    messages.success(request, f'Category "{category.name}" deleted successfully.')
+    return redirect('category_list')
+
 
 
 

@@ -1,9 +1,14 @@
 from django import forms
-from .models import Customer, ProblemStatement, Provider   
+from .models import Customer, ProblemStatement, Provider, Category
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 
-  
+# Form for Category model
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'description']
+
 
 # Update User Details
 class UpdateUserForm(UserChangeForm):
