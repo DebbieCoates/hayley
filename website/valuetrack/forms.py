@@ -134,10 +134,10 @@ class UpdateProvider(forms.ModelForm):
 	postcode = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Postcode', 'class': 'form-control'}), max_length=20, required=True)
 	country = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Country', 'class': 'form-control'}), max_length=100, required=True)
 	notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
-	
+	status = forms.ChoiceField(label='', choices=Provider._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
 	tags = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Tags (comma-separated)', 'class': 'form-control'}), max_length=255, required=False)		
  
 	class Meta:
 		model = Provider
-		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'tags']
+		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags']
   
