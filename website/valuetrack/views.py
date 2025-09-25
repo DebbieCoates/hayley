@@ -7,6 +7,20 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 
+
+
+
+# Create your views here.
+def home(request):
+    return render(request, 'home.html')
+
+# About page
+def about(request):
+    return render(request, 'about.html')
+
+
+
+
 # View all providers
 def provider_list(request):
     sort = request.GET.get('sort', 'name')
@@ -36,7 +50,6 @@ def provider_list(request):
 def provider(request, provider_id):
     provider = get_object_or_404(Provider, id=provider_id)
     return render(request, 'provider.html', {'provider': provider})
-
 
 # Delete a provider
 def provider_delete(request, provider_id):
@@ -74,17 +87,7 @@ def provider_add(request):
         form = UpdateProvider()
     return render(request, 'provider_add.html', {'form': form})
 
-# Create your views here.
-def home(request):
-    return render(request, 'home.html')
-
-# About page
-def about(request):
-    return render(request, 'about.html')
-
 # View all problem statements
-from django.db.models import Count
-
 def problem_list(request):
     sort = request.GET.get('sort', 'title')
     direction = request.GET.get('direction', 'asc')
@@ -115,8 +118,7 @@ def problem_list(request):
         'status_summary': status_summary,
         'urgency_summary': urgency_summary,
     })
-    
-    
+   
 # View an individual problem statement
 def problem(request, problem_id):
     problem = ProblemStatement.objects.get(id=problem_id)

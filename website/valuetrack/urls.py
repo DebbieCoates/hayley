@@ -35,4 +35,12 @@ urlpatterns = [
     path('provider_delete/<int:provider_id>/', views.provider_delete, name='provider_delete'),
     path('provider_edit/<int:provider_id>/', views.provider_edit, name='provider_edit'),
     path('provider_add/', views.provider_add, name='provider_add'),
+    
+    #Service URLs
+    path('services/', views.service_list, name='services'), 
+    path('service/<int:service_id>/', views.service, name='service'),
+    path('service_delete/<int:service_id>/', views.service_delete, name='service_delete'),
+    path('service_edit/<int:service_id>/', views.service_edit, name='service_edit'),
+    path('service_add/', views.service_add, name='service_add'),    
+  
 ]

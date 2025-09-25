@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 ProviderStatus_CHOICES = [
         ('Active', 'Active'),
-        ('Inactive', 'Inactive'),]
-    
+        ('Inactive', 'Inactive'),
+    ]
 ProviderType_CHOICES = [
         ('Internal', 'Internal'),
         ('External', 'External'),
@@ -23,7 +23,6 @@ Industry_CHOICES = [
         ('Con', 'Construction'),
         ('Other', 'Other')
     ]
-
 location_CHOICES = [
         ('East of England', 'East of England'), 
         ('East Midlands', 'East Midlands'), 
@@ -39,7 +38,6 @@ location_CHOICES = [
         ('Northern Ireland', 'Northern Ireland'),
         ('Other', 'Other')
     ]
-
 status_CHOICES = [
         ('Active', 'Active'),
         ('Inactive', 'Inactive'),
@@ -128,3 +126,51 @@ class Provider(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.type})"
+
+
+class Service(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    category = models.CharField(max_length=100, blank=True, null=True)
+    
+    # ✅ Many-to-many relationship
+    providers = models.ManyToManyField('Provider', through='ServiceProvider', related_name='services')
+
+    notes = models.TextField(blank=True, null=True)
+    active = models.BooleanField(default=True)
+
+    # ✅ Tagging
+    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
+
+    # ✅ Audit Trail
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='services_created')
+
+    def __str__(self):
+        return self.name
+    
+    
+class ServiceProvider(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, related_name='service_links')
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    available = models.BooleanField(default=True)
+
+    # ✅ Tagging
+    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
+
+    # ✅ Audit Trail
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='service_provider_links_created')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['service', 'provider'], name='unique_service_provider')
+        ]
+        
+    def __str__(self):
+        return f"{self.provider.name} provides {self.service.name}"
