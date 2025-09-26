@@ -3,28 +3,73 @@
 
 {% block content %}
 problem.html
+<br/><br/>
 
-    <br/><br/>    
-    <h1>{{ problem.title }}</h1>
-    <br/>
+    <div class="container text-left p-4 border rounded bg-light">
 
-    <p>Customer: <a href="{% url 'customer' customer.id %}">{{ customer.name }}</a></p>
-        {% comment %} <p><strong>Contact:</strong> {{ customer.main_contact }}</p>
-        <p><strong>Email:</strong> {{ customer.email }}</p>
-        <p><strong>Phone:</strong> {{ customer.phone }}</p> {% endcomment %}
+        <div class="row">
+            <div class="col">
+                <strong>Customer:</strong>    <a href="{% url 'customer' customer.id %}">{{ customer.name }}</a><br/><br/>
+            </div>
+        </div>
 
-    {% comment %} <strong>Name:</strong> {{ customer.name }}<br/> {% endcomment %}
-    <strong>Title:</strong> {{ problem.title }}<br/>
+
+        <div class="row">
+            <div class="col">
+            <strong>Title:</strong> {{ problem.title }}<br/><br/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+            <strong>Description:</strong> {{ problem.description }}<br/><br/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+            <strong>Root Cause:</strong> {{ problem.root_cause }}<br/><br/>
+            </div>
+        </div>
+
+        <div class="row">
+        <div class="col">
+        <strong>Impact:</strong> {{ problem.impact }}<br/><br/>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <strong>Urgency:</strong> {{ problem.urgency }}<br/><br/>
+        </div>
+        <div class="col">
+            <strong>Status:</strong> {{ problem.status }}<br/><br/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <strong>Notes:</strong> {{ problem.notes }}<br/><br/>
+        </div>
+  </div>
+</div>
+
+
+    {% comment %} <strong>Title:</strong> {{ problem.title }}<br/>
     <strong>Description:</strong> {{ problem.description }}<br/>
-    <strong>Created At:</strong> {{ problem.impact }}<br/>
-    <strong>Updated At:</strong> {{ problem.urgency }}<br/>
-    <strong>Status:</strong> {{ problem.status }}<br/>
-    <strong>Notes:</strong> {{ problem.notes }}<br/>
-
+    <strong>Root Cause:</strong> {{ problem.root_cause }}<br/>
+    <strong>Impact:</strong> {{ problem.impact }}<br/>
+    <strong>Urgency:</strong> {{ problem.urgency }}<br/>
+     <strong>Status:</strong> {{ problem.status }}<br/>
+    <strong>Notes:</strong> {{ problem.notes }}<br/> {% endcomment %}
+    <hr/>
+    <strong>Created At:</strong> {{ problem.created_at }}<br/>
+    <strong>Updated At:</strong> {{ problem.updated_at }}<br/>
 
     <br/><br/>
-    <a href="" class="btn btn-primary">Edit</a>
-    <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn  btn-danger">Delete</a>
+    {% comment %} <a href="" class="btn btn-primary">Edit</a>
+    <a href="{% url 'problem_delete' problem.id %}?next={% url 'customer' customer.id %}" class="btn  btn-danger">Delete</a> {% endcomment %}
     
     <br/><br/>
     <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary">Back to Customer</a>

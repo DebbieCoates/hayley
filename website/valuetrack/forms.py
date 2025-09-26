@@ -88,7 +88,7 @@ class UpdateCustomer(forms.ModelForm):
     industry = forms.ChoiceField(label='Industry', choices=Customer._meta.get_field('industry').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
     location = forms.ChoiceField(label='Location', choices=Customer._meta.get_field('location').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
     sector = forms.CharField(label='Sector', widget=forms.TextInput(attrs={'placeholder': 'Sector', 'class': 'form-control'}), max_length=100, required=False)
-    account_manager = forms.CharField(label='Account Manager', widget=forms.TextInput(attrs={'placeholder': 'Account Manager', 'class': 'form-control'}), max_length=200, required=False)
+    account_manager = forms.CharField(label='Hayley Account Manager', widget=forms.TextInput(attrs={'placeholder': 'Account Manager', 'class': 'form-control'}), max_length=200, required=False)
     status = forms.ChoiceField(label='Status', choices=Customer._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
 
     notes = forms.CharField(label='Notes', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control'}), required=False)
@@ -117,6 +117,7 @@ class UpdateProblem(forms.ModelForm):
 
     title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'placeholder': 'Problem Title', 'class': 'form-control'}), max_length=200, required=True)
     description = forms.CharField(label='Description', widget=forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control', 'rows': 4}), required=True)
+    root_cause = forms.CharField(label='Root Cause', widget=forms.Textarea(attrs={'placeholder': 'Root Cause', 'class': 'form-control', 'rows': 3}), required=False)
     impact = forms.CharField(label='Impact', widget=forms.Textarea(attrs={'placeholder': 'Impact', 'class': 'form-control', 'rows': 3}), required=False)
     urgency = forms.ChoiceField(label='Urgency', choices=ProblemStatement._meta.get_field('urgency').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
     status = forms.ChoiceField(label='Status', choices=ProblemStatement._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
@@ -124,7 +125,7 @@ class UpdateProblem(forms.ModelForm):
 
     class Meta:
         model = ProblemStatement
-        fields = ['customer', 'title', 'description', 'impact', 'urgency', 'status', 'notes', ]
+        fields = ['customer', 'title', 'description', 'root_cause', 'impact', 'urgency', 'status', 'notes', ]
         
 # Form to Update Provider Details        
 class UpdateProvider(forms.ModelForm):

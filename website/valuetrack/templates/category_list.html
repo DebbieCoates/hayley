@@ -18,23 +18,30 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th>Category</th>
-          <th>Action</th>
+          <th style="width: 25%;">Category</th>      <!-- 25% width -->
+          <th style="width: 60%;">Description</th>   <!-- 60% width -->
+          <th style="width: 15%;">Action</th>  
+
         </tr>
       </thead>
       <tbody>
         {% for category in categories %}
         <tr>
           <td>{{ category.name }}</td>
+          <td>{{ category.description }}</td>
+          <!-- Action Buttons -->
           <td>
-            <!-- Edit Button -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ category.id }}">
-              Edit
-            </button>
-
-            <!-- Delete Button -->
-            <a href="{% url 'category_delete' category.id %}" class="btn btn-danger ms-2">Delete</a>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#editModal{{ category.id }}">
+                Edit
+              </button>
+              <a href="{% url 'category_delete' category.id %}" class="btn btn-danger w-50">
+                Delete
+              </a>
+            </div>
           </td>
+
+
         </tr>
 
         <!-- Edit Modal -->
@@ -43,18 +50,28 @@
             <div class="modal-content">
               <form method="POST" action="{% url 'category_edit' category.id %}">
                 {% csrf_token %}
+                
+                <!-- Modal Header -->                 
                 <div class="modal-header">
                   <h5 class="modal-title" id="editModalLabel{{ category.id }}">Edit Category</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <!-- Modal Body -->
                 <div class="modal-body">
                   <input type="text" name="name" class="form-control" value="{{ category.name }}" required>
                   <textarea name="description" class="form-control mt-2">{{ category.description }}</textarea>
                 </div>
+                
+                <!-- Modal Footer -->
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                  <div class="d-flex w-100 gap-2">
+                    <button type="button" class="btn btn-secondary w-50" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary w-50">Save Changes</button>
+                  </div>
                 </div>
+
+
               </form>
             </div>
           </div>
@@ -64,6 +81,8 @@
         {% endfor %}
       </tbody>
     </table>
+
+
   {% endif %}
 
 <!-- Add Category Modal -->

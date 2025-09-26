@@ -86,6 +86,7 @@ class ProblemStatement(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='problem_statements')
     title = models.CharField(max_length=200)
     description = models.TextField()
+    root_cause = models.TextField(blank=True, null=True)
     impact = models.TextField(blank=True, null=True)
     urgency = models.CharField(max_length=50, choices=Urgency_CHOICES, blank=True, null=True, default='Medium')
     status = models.CharField(max_length=50, choices=ProblemStatus_CHOICES, blank=True, null=True, default='Open')
@@ -166,6 +167,10 @@ class Solution(models.Model):
 class ProblemSolutionLink(models.Model):
     problem = models.ForeignKey(ProblemStatement, on_delete=models.CASCADE, related_name='solutions')
     solution = models.ForeignKey(Solution, on_delete=models.CASCADE, related_name='problems')
+
+    strategy = models.TextField(blank=True, null=True)
+    results = models.TextField(blank=True, null=True)
+    lessons_learned = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

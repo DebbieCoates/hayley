@@ -5,25 +5,48 @@ problem_add.html
 
 <br/><br/>
 
-{% if customer %}
-  <h1>Add Problem Statement for {{ customer.name }}</h1>
-  <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary">Back to Customer</a>
-{% else %}
-  <h1>Add Problem Statement</h1>
-{% endif %}
+<form method="post" action="">
+  {% csrf_token %}
 
-<br/><br/>
+  <!-- Form Header -->
+  <div class="bg-light p-3 mb-4 border rounded">
+    {% if customer %}
+      <h4 class="mb-0">Add Problem Statement for {{ customer.name }}</h4>
+      <small class="text-muted">Describe the issue clearly and concisely</small>
+    {% else %}
+      <h4 class="mb-0">Add Problem Statement</h4>
+      <small class="text-muted">Please fill in all relevant fields</small>
+    {% endif %}
+  </div> <!-- Form Header -->
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
+  <!-- Form Body -->
+  {% for field in form %}
+    <div class="row mb-3 align-items-center">
+      <div class="col-sm-3 text-end pe-2">
+        <label for="{{ field.id_for_label }}" class="form-label mb-0">{{ field.label }}</label>
+      </div>
+      <div class="col-sm-6">
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger small">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %} <!-- Form Body -->
+
+  <!-- Form Footer -->
+  <div class="bg-light p-3 mt-4 border rounded d-flex justify-content-between align-items-center">
+    <span class="text-muted">All fields are optional unless marked required</span>
+    <div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      {% if customer %}
+        <a href="{% url 'customer' customer.id %}" class="btn btn-outline-primary ms-2">Back to Customer</a>
+      {% else %}
+        <a href="{% url 'customers' %}" class="btn btn-outline-primary ms-2">Back</a>
+      {% endif %}
+    </div>
+  </div> <!-- Form Footer -->
+
 </form>
-
-<br/><br/>
-
-
-
-
 
 {% endblock %}

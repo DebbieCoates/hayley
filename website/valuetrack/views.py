@@ -235,6 +235,7 @@ def problem_edit(request, problem_id):
             form.save()
             messages.success(request, f'Problem "{problem.title}" updated successfully.')
             return redirect('problem', problem_id=problem.id)
+        
     else:
         form = UpdateProblem(instance=problem)
 

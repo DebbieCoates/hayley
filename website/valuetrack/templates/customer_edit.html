@@ -1,24 +1,43 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 customer_edit.html
 
-    <br/><br/>    
-    <h1>Edit Customer: {{ customer.name }}</h1>
-    <br/>
+<br/><br/>
 
+<form method="post" enctype="multipart/form-data" action="{% url 'customer_edit' customer.id %}">
+  {% csrf_token %}
 
-    <form method="post" enctype="multipart/form-data" action="{% url 'customer_edit' customer.id %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-         <br/><br/>
-        <button type="submit" class="btn btn-primary">Save Changes</button>  
-    </form>
+  <!-- Form Header -->
+  <div class="bg-light p-3 mb-4 border rounded">
+    <h4 class="mb-0">Edit Customer: {{ customer.name }}</h4>
+    <small class="text-muted">Update customer details below</small>
+  </div> <!-- Form Header -->
 
+  <!-- Form Body -->
+  {% for field in form %}
+    <div class="row mb-3 align-items-center">
+      <div class="col-sm-3 text-end pe-2">
+        <label for="{{ field.id_for_label }}" class="form-label mb-0">{{ field.label }}</label>
+      </div>
+      <div class="col-sm-6">
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger small">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %} <!-- Form Body -->
 
-    <br/><br/>
-    <a href="{% url 'customers' %}" class="btn btn-outline-primary">Back</a>
+  <!-- Form Footer -->
+  <div class="bg-light p-3 mt-4 border rounded d-flex justify-content-between align-items-center">
+    <span class="text-muted">All fields are optional unless marked required</span>
+    <div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{% url 'customers' %}" class="btn btn-outline-primary ms-2">Back</a>
+    </div>
+  </div> <!-- Form Footer -->
+
+</form>
 
 {% endblock %}
-
