@@ -21,6 +21,7 @@ Industry_CHOICES = [
         ('Food', 'Food & Beverage'),
         ('Media', 'Media & Entertainment'),
         ('Con', 'Construction'),
+        ('Manu', 'Manufacturing'),
         ('Other', 'Other')
     ]
 location_CHOICES = [
@@ -66,6 +67,7 @@ class Customer(models.Model):
     email = models.EmailField(max_length=254, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     industry = models.CharField(max_length=100, choices=Industry_CHOICES, blank=True, null=True)
+    sector = models.CharField(max_length=100, blank=True, null=True),
     location = models.CharField(max_length=100, choices=location_CHOICES, blank=True, null=True)
     account_manager = models.CharField(max_length=100, blank=True, null=True)   
     status = models.CharField(max_length=50, choices=status_CHOICES, blank=True, null=True, default='Active')
@@ -114,8 +116,6 @@ class Provider(models.Model):
     status = models.CharField(max_length=50, choices=ProviderStatus_CHOICES, default='Active')
     website = models.URLField(blank=True, null=True)
     industry = models.CharField(max_length=100, choices=Industry_CHOICES, blank=True, null=True, default='Other')
-    # services_offered = models.TextField(blank=True, null=True)  
-
     # ✅ Tagging
     tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords (e.g. IT, Logistics, Europe)")
 
