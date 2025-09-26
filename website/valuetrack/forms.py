@@ -113,12 +113,12 @@ class UpdateProblem(forms.ModelForm):
             self.fields['customer'].widget = forms.HiddenInput()
 
 
-    title = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Problem Title', 'class': 'form-control'}), max_length=200, required=True)
-    description = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control', 'rows': 4}), required=True)
-    impact = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Impact', 'class': 'form-control', 'rows': 3}), required=False)
-    urgency = forms.ChoiceField(label='', choices=ProblemStatement._meta.get_field('urgency').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
-    status = forms.ChoiceField(label='', choices=ProblemStatement._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
-    notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
+    title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'placeholder': 'Problem Title', 'class': 'form-control'}), max_length=200, required=True)
+    description = forms.CharField(label='Description', widget=forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control', 'rows': 4}), required=True)
+    impact = forms.CharField(label='Impact', widget=forms.Textarea(attrs={'placeholder': 'Impact', 'class': 'form-control', 'rows': 3}), required=False)
+    urgency = forms.ChoiceField(label='Urgency', choices=ProblemStatement._meta.get_field('urgency').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    status = forms.ChoiceField(label='Status', choices=ProblemStatement._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    notes = forms.CharField(label='Notes', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control', 'rows': 3}), required=False)
 
     class Meta:
         model = ProblemStatement
