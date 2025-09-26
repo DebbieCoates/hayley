@@ -81,23 +81,25 @@ class SignUpForm(UserCreationForm):
 # Form to Update Customer Details
 class UpdateCustomer(forms.ModelForm):
     
-    name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Customer Name', 'class': 'form-control'}), max_length=200, required=False)
-    main_contact = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Main Contact','class': 'form-control'}), max_length=200, required=False)
-    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=False)
-    phone = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=20, required=False)
-    industry = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Industry', 'class': 'form-control'}), max_length=100, required=False)
-    location = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Location', 'class': 'form-control'}), max_length=100, required=False)
-    account_manager = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Account Manager', 'class': 'form-control'}), max_length=200, required=False)
-    status = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Status', 'class': 'form-control'}), max_length=100, required=False)
-    notes = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control'}), required=False)
+    name = forms.CharField(label='Name', widget=forms.TextInput(attrs={'placeholder': 'Customer Name', 'class': 'form-control'}), max_length=200, required=False)
+    main_contact = forms.CharField(label='Contact', widget=forms.TextInput(attrs={'placeholder': 'Main Contact','class': 'form-control'}), max_length=200, required=False)
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'form-control'}), required=False)
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'placeholder': 'Phone', 'class': 'form-control'}), max_length=20, required=False)
+    industry = forms.ChoiceField(label='Industry', choices=Customer._meta.get_field('industry').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    location = forms.ChoiceField(label='Location', choices=Customer._meta.get_field('location').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
+    sector = forms.CharField(label='Sector', widget=forms.TextInput(attrs={'placeholder': 'Sector', 'class': 'form-control'}), max_length=100, required=False)
+    account_manager = forms.CharField(label='Account Manager', widget=forms.TextInput(attrs={'placeholder': 'Account Manager', 'class': 'form-control'}), max_length=200, required=False)
+    status = forms.ChoiceField(label='Status', choices=Customer._meta.get_field('status').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=False)
 
-    logo = forms.ImageField(label='', required=False)
+    notes = forms.CharField(label='Notes', widget=forms.Textarea(attrs={'placeholder': 'Notes', 'class': 'form-control'}), required=False)
+
+    logo = forms.ImageField(label='Logo', required=False)
 
     class Meta:
         # Form for updating customer details
         model = Customer
         # Include all relevant fields for editing
-        fields = ['name', 'main_contact', 'phone', 'email', 'account_manager', 'status', 'industry', 'location', 'notes', 'logo',]
+        fields = ['name', 'main_contact', 'phone', 'email', 'account_manager', 'status', 'industry', 'sector', 'location', 'notes', 'logo', ]
         
 # Form to Update Problem Statement Details        
 class UpdateProblem(forms.ModelForm):
@@ -124,7 +126,7 @@ class UpdateProblem(forms.ModelForm):
         model = ProblemStatement
         fields = ['customer', 'title', 'description', 'impact', 'urgency', 'status', 'notes', ]
         
-        
+# Form to Update Provider Details        
 class UpdateProvider(forms.ModelForm):
 	name = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Provider Name', 'class': 'form-control'}), max_length=200, required=True)
 	type = forms.ChoiceField(label='', choices=Provider._meta.get_field('type').choices, widget=forms.Select(attrs={'class': 'form-select'}), required=True)	
@@ -158,7 +160,7 @@ class UpdateProvider(forms.ModelForm):
 		model = Provider
 		fields = ['name', 'type', 'department', 'contact_name', 'email', 'phone', 'address', 'address2', 'city', 'county', 'postcode', 'country', 'notes', 'status', 'tags', 'website', 'industry',]
 
-
+# Form for Service model
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
