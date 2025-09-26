@@ -9,10 +9,18 @@ from django.db.models import Count, Q
 
 
 
+
 def service_list(request):
     services = Service.objects.select_related('category').all()
+    categories = Category.objects.all()
     form = ServiceForm()
-    return render(request, 'service_list.html', {'services': services, 'form': form})
+    return render(request, 'service_list.html', {
+        'services': services,
+        'categories': categories,
+        'form': form
+    })
+
+
 
 def service_add(request):
     form = ServiceForm(request.POST or None)
@@ -25,11 +33,25 @@ def service_add(request):
 
 def service_edit(request, pk):
     service = get_object_or_404(Service, pk=pk)
-    form = ServiceForm(request.POST or None, instance=service)
-    if form.is_valid():
-        form.save()
+
+    if request.method == 'POST':
+        service.name = request.POST.get('name')
+        service.description = request.POST.get('description')
+        service.tags = request.POST.get('tags')
+        service.active = 'active' in request.POST
+
+        category_id = request.POST.get('category')
+        if category_id:
+            service.category = get_object_or_404(Category, pk=category_id)
+
+        service.save()
+        messages.success(request, "Service updated successfully.")
         return redirect('service_list')
-    return render(request, 'services/form.html', {'form': form})
+
+    messages.error(request, "Invalid request method.")
+    return redirect('service_list')
+
+
 
 def service_delete(request, pk):
     service = get_object_or_404(Service, pk=pk)
